@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger'); // Agora o arquivo está na mesma pasta
