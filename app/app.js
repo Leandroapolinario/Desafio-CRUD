@@ -209,8 +209,9 @@ app.delete('/alunos/:id', (req, res) => {
 });
 
 
-app.listen(3000, () => {
-  console.log('Servidor rodando na porta 3000');
+const PORT = process.env.PORT || 3000;  // Use a porta fornecida pelo Heroku ou 3000 como padrão para desenvolvimento local
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
 
 process.on('exit', () => {
