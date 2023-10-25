@@ -13,7 +13,7 @@ const options = {
         Aluno: {
           type: 'object',
           properties: {
-            ID: {
+            id: {
               type: 'integer',
             },
             nome: {
