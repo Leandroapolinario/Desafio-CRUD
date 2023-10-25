@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
   host: 'localhost', // Endereço do servidor MySQL
   port: 3306, // Porta do servidor MySQL (substitua pela porta desejada)
   user: 'root', // Nome de usuário do MySQL
-  password: 'root', // Senha do MySQL
+  password: 'Ren@scer89', // Senha do MySQL
   database: 'escola', // Nome do banco de dados
 }); 
 
