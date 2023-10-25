@@ -48,11 +48,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
  */
 app.get('/alunos', (req, res) => {
   // Use SQL para consultar o banco de dados e obter todos os alunos
-  connection.query('SELECT * FROM alunos', (error, results) => {
+  pool.query('SELECT * FROM alunos', (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Erro ao buscar alunos.' });
     } else {
-      res.json(results);
+      res.json(results.rows);
     }
   });
 });
@@ -78,13 +78,13 @@ app.get('/alunos', (req, res) => {
 app.get('/alunos/:id', (req, res) => {
   const alunoId = req.params.id;
   // Use SQL para consultar o banco de dados e obter o aluno com o ID correspondente
-  connection.query('SELECT * FROM alunos WHERE id = ?', [alunoId], (error, results) => {
+  pool.query('SELECT * FROM alunos WHERE id = $1', [alunoId], (error, results) => {
     if (error) {
       res.status(500).json({ error: 'Erro ao buscar aluno.' });
-    } else if (results.length === 0) {
+    } else if (results.rows.length === 0) {
       res.status(404).json({ error: 'Aluno não encontrado.' });
     } else {
-      res.json(results[0]);
+      res.json(results.rows[0]);
     }
   });
 });
@@ -109,12 +109,23 @@ app.get('/alunos/:id', (req, res) => {
  */
 app.post('/alunos', (req, res) => {
   const novoAluno = req.body;
-  // Use SQL para inserir o novo aluno no banco de dados
-  connection.query('INSERT INTO alunos SET ?', novoAluno, (error, results) => {
+  // Use SQL para inserir o novo aluno no banco de dados PostgreSQL
+  const query = 'INSERT INTO alunos (id, nome, idade, nota_primeiro_semestre, nota_segundo_semestre, nome_professor, numero_sala) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+  const values = [
+    novoAluno.id,
+    novoAluno.nome,
+    novoAluno.idade,
+    novoAluno.nota_primeiro_semestre,
+    novoAluno.nota_segundo_semestre,
+    novoAluno.nome_professor,
+    novoAluno.numero_sala
+  ];
+
+  pool.query(query, values, (error) => {
     if (error) {
       res.status(500).json({ error: 'Erro ao criar aluno.' });
     } else {
-      res.json({ message: 'Aluno criado com sucesso.' });
+      res.status(201).json({ message: 'Aluno criado com sucesso.' });
     }
   });
 });
@@ -147,7 +158,18 @@ app.put('/alunos/:id', (req, res) => {
   const alunoId = req.params.id;
   const dadosAtualizados = req.body;
   // Use SQL para atualizar o aluno com o ID correspondente usando os dados fornecidos em 'dadosAtualizados'.
-  connection.query('UPDATE alunos SET ? WHERE id = ?', [dadosAtualizados, alunoId], (error, results) => {
+  const query = 'UPDATE alunos SET nome = $2, idade = $3, nota_primeiro_semestre = $4, nota_segundo_semestre = $5, nome_professor = $6, numero_sala = $7 WHERE id = $1';
+  const values = [
+    alunoId,
+    dadosAtualizados.nome,
+    dadosAtualizados.idade,
+    dadosAtualizados.nota_primeiro_semestre,
+    dadosAtualizados.nota_segundo_semestre,
+    dadosAtualizados.nome_professor,
+    dadosAtualizados.numero_sala
+  ];
+
+  pool.query(query, values, (error) => {
     if (error) {
       res.status(500).json({ error: 'Erro ao atualizar aluno.' });
     } else {
@@ -177,7 +199,7 @@ app.put('/alunos/:id', (req, res) => {
 app.delete('/alunos/:id', (req, res) => {
   const alunoId = req.params.id;
   // Use SQL para excluir o aluno com o ID correspondente.
-  connection.query('DELETE FROM alunos WHERE id = ?', [alunoId], (error, results) => {
+  pool.query('DELETE FROM alunos WHERE id = $1', [alunoId], (error) => {
     if (error) {
       res.status(500).json({ error: 'Erro ao excluir aluno.' });
     } else {
@@ -185,6 +207,7 @@ app.delete('/alunos/:id', (req, res) => {
     }
   });
 });
+
 
 app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000');
