@@ -8,11 +8,12 @@ app.use(express.json()); // Para processar o corpo das solicitações em formato
 
 // Configuração da conexão com o MySQL
 const connection = mysql.createConnection({
-    host: 'localhost', // Endereço do servidor MySQL
-    user: 'root', // Nome de usuário do MySQL (no seu caso, 'root')
-    password: 'Ren@scer89', // Senha do MySQL (no seu caso, 'Ren@scer89')
-    database: 'escola', // Nome do banco de dados (o mesmo que você criou)
-  });  
+  host: 'localhost', // Endereço do servidor MySQL
+  port: 3306, // Porta do servidor MySQL (substitua pela porta desejada)
+  user: 'root', // Nome de usuário do MySQL
+  password: 'root', // Senha do MySQL
+  database: 'escola', // Nome do banco de dados
+}); 
 
 connection.connect((err) => {
   if (err) {
