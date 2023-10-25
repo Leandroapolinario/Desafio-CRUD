@@ -25,13 +25,13 @@ const pool = new Pool({
 });
 
 
-connection.connect((err) => {
-  if (err) {
-    console.error('Erro de conexão ao banco de dados:', err);
-    return;
-  }
-  console.log('Conexão ao banco de dados MySQL estabelecida.');
-});
+// connection.connect((err) => {
+//   if (err) {
+//     console.error('Erro de conexão ao banco de dados:', err);
+//     return;
+//   }
+//   console.log('Conexão ao banco de dados MySQL estabelecida.');
+// });
 
 // Middleware para servir a documentação do Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
