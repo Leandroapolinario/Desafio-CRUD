@@ -6,9 +6,9 @@
     "start": "node app/app.js",
     "predev": "npm run swagger",
     "prebuild": "npm run swagger",
-    "build": "tsc",
-    "dev": "concurrently \"nodemon\" \"nodemon -x tsoa spec\"",
-    "swagger": "tsoa spec"
+    "build": "echo",
+    "dev": "concurrently \"nodemon\"",
+    "swagger": "echo 'swagger already exists on app/swagger.js', no need to generate"
   },
   "keywords": [],
   "author": "",
@@ -16,11 +16,10 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
-    "mysql2": "^3.6.2",
+    "pg": "^8.11.3",
     "sequelize": "^6.33.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0",
-    "tsoa": "^5.1.1"
+    "swagger-ui-express": "^5.0.0"
   },
   "description": "",
   "devDependencies": {
