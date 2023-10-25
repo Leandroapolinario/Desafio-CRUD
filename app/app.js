@@ -1,19 +1,29 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger'); // Agora o arquivo está na mesma pasta
-const mysql = require('mysql2'); // Importe a biblioteca MySQL
+// const mysql = require('mysql2'); // Importe a biblioteca MySQL
+const { Pool } = require('pg'); // Importe a biblioteca PostgreSQL
 
 const app = express();
 app.use(express.json()); // Para processar o corpo das solicitações em formato JSON
 
 // Configuração da conexão com o MySQL
-const connection = mysql.createConnection({
-  host: 'localhost', // Endereço do servidor MySQL
-  port: 3306, // Porta do servidor MySQL (substitua pela porta desejada)
-  user: 'root', // Nome de usuário do MySQL
-  password: 'Ren@scer89', // Senha do MySQL
-  database: 'escola', // Nome do banco de dados
-}); 
+// const connection = mysql.createConnection({
+// host: 'localhost', // Endereço do servidor MySQL
+//  port: 3306, // Porta do servidor MySQL (substitua pela porta desejada)
+//  user: 'root', // Nome de usuário do MySQL
+//  password: 'Ren@scer89', // Senha do MySQL
+//  database: 'escola', // Nome do banco de dados
+// }); 
+
+const connectionString = process.env.DATABASE_URL;
+const pool = new Pool({
+  connectionString: connectionString,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
 
 connection.connect((err) => {
   if (err) {
