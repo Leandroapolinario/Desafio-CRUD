@@ -73,6 +73,7 @@
                 .then((response) => response.json())
                 .then((data) => {
                     console.log("Aluno inserido com sucesso na API:", data);
+                    console.error("body = ", JSON.stringify(student));
     
                     // Crie um elemento de lista para exibir os dados do aluno inserido
                     const listItem = document.createElement("li");
@@ -90,6 +91,7 @@
                 })
                 .catch((error) => {
                     console.error("Erro ao inserir aluno na API:", error);
+                    console.error("body = ", JSON.stringify(student));
                 });
         });
     </script>

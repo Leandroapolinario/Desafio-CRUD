@@ -115,6 +115,7 @@ app.get('/alunos/:id', (req, res) => {
  */
 app.post('/alunos', (req, res) => {
   const novoAluno = req.body;
+  console.log("novoAluno = ", novoAluno);
   // Use SQL para inserir o novo aluno no banco de dados PostgreSQL
   const query = 'INSERT INTO alunos (id, nome, idade, nota_primeiro_semestre, nota_segundo_semestre, nome_professor, numero_sala) VALUES ($1, $2, $3, $4, $5, $6, $7)';
   const values = [
@@ -126,6 +127,8 @@ app.post('/alunos', (req, res) => {
     novoAluno.nome_professor,
     novoAluno.numero_sala
   ];
+
+  console.log("Valores a serem inseridos no banco:", values);
 
   pool.query(query, values, (error) => {
     if (error) {
