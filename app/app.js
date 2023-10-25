@@ -175,3 +175,17 @@ app.delete('/alunos/:id', (req, res) => {
     }
   });
 });
+
+app.listen(3000, () => {
+  console.log('Servidor rodando na porta 3000');
+});
+
+process.on('exit', () => {
+  connection.end((err) => {
+    if (err) {
+      console.error('Erro ao fechar a conexão com o banco de dados:', err);
+    } else {
+      console.log('Conexão ao banco de dados MySQL encerrada.');
+    }
+  });
+});
