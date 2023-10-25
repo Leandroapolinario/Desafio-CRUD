@@ -129,6 +129,7 @@ app.post('/alunos', (req, res) => {
 
   pool.query(query, values, (error) => {
     if (error) {
+      console.error("Erro ao criar aluno:", error);
       res.status(500).json({ error: 'Erro ao criar aluno.' });
     } else {
       res.status(201).json({ message: 'Aluno criado com sucesso.' });
