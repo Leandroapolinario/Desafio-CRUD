@@ -26,7 +26,16 @@ connection.connect((err) => {
 // Middleware para servir a documentação do Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Listar todos os alunos (GET)
+/**
+ * @swagger
+ * /alunos:
+ *   get:
+ *     summary: Listar todos os alunos
+ *     description: Retorna a lista de todos os alunos na escola.
+ *     responses:
+ *       200:
+ *         description: Lista de alunos recuperada com sucesso.
+ */
 app.get('/alunos', (req, res) => {
   // Use SQL para consultar o banco de dados e obter todos os alunos
   connection.query('SELECT * FROM alunos', (error, results) => {
@@ -38,7 +47,24 @@ app.get('/alunos', (req, res) => {
   });
 });
 
-// Recuperar um aluno por ID (GET)
+/**
+ * @swagger
+ * /alunos/{id}:
+ *   get:
+ *     summary: Recuperar um aluno por ID
+ *     description: Recupera um aluno com base no ID fornecido.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Aluno recuperado com sucesso.
+ *       404:
+ *         description: Aluno não encontrado.
+ */
 app.get('/alunos/:id', (req, res) => {
   const alunoId = req.params.id;
   // Use SQL para consultar o banco de dados e obter o aluno com o ID correspondente
@@ -53,7 +79,24 @@ app.get('/alunos/:id', (req, res) => {
   });
 });
 
-// Criar um novo aluno (POST)
+/**
+ * @swagger
+ * /alunos:
+ *   post:
+ *     summary: Criar um novo aluno
+ *     description: Cria um novo aluno com os dados fornecidos.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Aluno'  # Certifique-se de que esteja correto e corresponda ao seu esquema de dados
+ *     responses:
+ *       201:
+ *         description: Aluno criado com sucesso.
+ *       500:
+ *         description: Erro ao criar aluno.
+ */
 app.post('/alunos', (req, res) => {
   const novoAluno = req.body;
   // Use SQL para inserir o novo aluno no banco de dados
@@ -66,7 +109,30 @@ app.post('/alunos', (req, res) => {
   });
 });
 
-// Atualizar um aluno por ID (PUT)
+/**
+ * @swagger
+ * /alunos/{id}:
+ *   put:
+ *     summary: Atualizar um aluno por ID
+ *     description: Atualiza um aluno com base no ID fornecido e os dados fornecidos.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Aluno'  # Certifique-se de que esteja correto e corresponda ao seu esquema de dados
+ *     responses:
+ *       200:
+ *         description: Aluno atualizado com sucesso.
+ *       500:
+ *         description: Erro ao atualizar aluno.
+ */
 app.put('/alunos/:id', (req, res) => {
   const alunoId = req.params.id;
   const dadosAtualizados = req.body;
@@ -80,7 +146,24 @@ app.put('/alunos/:id', (req, res) => {
   });
 });
 
-// Excluir um aluno por ID (DELETE)
+/**
+ * @swagger
+ * /alunos/{id}:
+ *   delete:
+ *     summary: Excluir um aluno por ID
+ *     description: Exclui um aluno com base no ID fornecido.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Aluno excluído com sucesso.
+ *       500:
+ *         description: Erro ao excluir aluno.
+ */
 app.delete('/alunos/:id', (req, res) => {
   const alunoId = req.params.id;
   // Use SQL para excluir o aluno com o ID correspondente.
@@ -89,20 +172,6 @@ app.delete('/alunos/:id', (req, res) => {
       res.status(500).json({ error: 'Erro ao excluir aluno.' });
     } else {
       res.json({ message: 'Aluno excluído com sucesso.' });
-    }
-  });
-});
-
-app.listen(3000, () => {
-  console.log('Servidor rodando na porta 3000');
-});
-
-process.on('exit', () => {
-  connection.end((err) => {
-    if (err) {
-      console.error('Erro ao fechar a conexão com o banco de dados:', err);
-    } else {
-      console.log('Conexão ao banco de dados MySQL encerrada.');
     }
   });
 });
