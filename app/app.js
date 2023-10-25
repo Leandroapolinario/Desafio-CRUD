@@ -36,6 +36,11 @@ const pool = new Pool({
 // Middleware para servir a documentação do Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// Rota para a raiz
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 /**
  * @swagger
  * /alunos:
