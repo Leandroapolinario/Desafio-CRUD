@@ -21,7 +21,7 @@
     <ul id="student-list"></ul>
     <script>
         const apiUrl = "https://desafiocrud-4d47d4773a84.herokuapp.com/alunos"; // URL da API no Heroku
-
+    
         const form = document.getElementById("student-form");
         const idInput = document.getElementById("id");
         const nameInput = document.getElementById("name");
@@ -31,28 +31,38 @@
         const professorInput = document.getElementById("professor");
         const roomInput = document.getElementById("room");
         const studentList = document.getElementById("student-list");
-
+    
         form.addEventListener("submit", function (e) {
             e.preventDefault();
-
-            const id = idInput.value;
+    
+            // Obtenha os valores dos campos do formulário
+            const id = parseInt(idInput.value);
             const name = nameInput.value;
-            const age = ageInput.value;
-            const semester1 = semester1Input.value;
-            const semester2 = semester2Input.value;
+            const age = parseInt(ageInput.value);
+            const semester1 = parseFloat(semester1Input.value);
+            const semester2 = parseFloat(semester2Input.value);
             const professor = professorInput.value;
-            const room = roomInput.value;
-
+            const room = parseInt(roomInput.value);
+    
+            // Verifique se todos os campos obrigatórios estão preenchidos
+            if (!id || !name || !age || !semester1 || !semester2 || !professor || !room) {
+                console.error("Preencha todos os campos obrigatórios.");
+                alert("Preencha todos os campos obrigatórios.");
+                return;
+            }
+    
+            // Crie o objeto do aluno
             const student = {
                 id,
-                name,
-                age,
-                semester1,
-                semester2,
-                professor,
-                room,
+                nome: name,
+                idade: age,
+                nota_primeiro_semestre: semester1,
+                nota_segundo_semestre: semester2,
+                nome_professor: professor,
+                numero_sala: room,
             };
-
+    
+            // Envie a solicitação POST com o objeto do aluno
             fetch(apiUrl, {
                 method: "POST",
                 headers: {
@@ -63,11 +73,13 @@
                 .then((response) => response.json())
                 .then((data) => {
                     console.log("Aluno inserido com sucesso na API:", data);
-
+    
+                    // Crie um elemento de lista para exibir os dados do aluno inserido
                     const listItem = document.createElement("li");
-                    listItem.textContent = `ID: ${student.id}, Nome: ${student.name}, Idade: ${student.age}, Nota 1º Semestre: ${student.semester1}, Nota 2º Semestre: ${student.semester2}, Professor: ${student.professor}, Sala: ${student.room}`;
+                    listItem.textContent = `ID: ${student.id}, Nome: ${student.nome}, Idade: ${student.idade}, Nota 1º Semestre: ${student.nota_primeiro_semestre}, Nota 2º Semestre: ${student.nota_segundo_semestre}, Professor: ${student.nome_professor}, Sala: ${student.numero_sala}`;
                     studentList.appendChild(listItem);
-
+    
+                    // Limpe os campos do formulário após a inserção
                     idInput.value = "";
                     nameInput.value = "";
                     ageInput.value = "";
@@ -81,6 +93,7 @@
                 });
         });
     </script>
+    
 
     <!-- <script src="js/script.js"></script> -->
 </body>
